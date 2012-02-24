@@ -136,11 +136,9 @@ class Rdio::Client
   end
 
   def call(method, params = {})
-    params = params.select { |_, v| v }   # Strip nil params. Rdio no like :(
-
     response = @connection.post do |request|  # Make HTTP request
       request.url "/#{VERSION}/"
-      request.body = params.merge(method: method.to_s)
+      request.body = unwrap_params(params).merge(method: method.to_s)
     end
 
     body = response.body                      # Check for API errors

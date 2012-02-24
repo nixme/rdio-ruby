@@ -6,6 +6,11 @@ module Rdio::Types
       @client = client   # TODO: might not be a great idea?
       super hash
     end
+
+    def is_a?(klass)
+      return false if klass == Hash
+      super
+    end
   end
 
   class Album < APIType; end
@@ -43,13 +48,28 @@ module Rdio::Types
     'c'   => UserCollectionStation
   }
 
+  def unwrap_params(params)
+    params = params.select { |_, v| v }    # Strip nil params. Rdio no like :(
+
+    Hash[
+      params.map do |name, value|
+        value = value.key if value.is_a?(APIType)
+        [name, value]
+      end
+    ]
+  end
+
   def wrap_result(client, result)
     case result
     when Hash
       if klass = API_NAME_TO_CLASS[result['type']]
         klass.new(client, result)
       else
-        result
+        Hashie::Rash.new(Hash[
+          result.map do |key, value|
+            [key, wrap_result(client, value)]
+          end
+        ])
       end
     when Array
       result.map { |item| wrap_result(client, item) }
