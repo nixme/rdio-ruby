@@ -19,8 +19,7 @@ Gem::Specification.new do |gem|
 
   # Dependencies
   gem.required_ruby_version = '>= 1.9.2'
-  gem.add_runtime_dependency 'faraday', '~> 0.7.6'
-  gem.add_runtime_dependency 'faraday_middleware', '~> 0.8.4'
-  gem.add_runtime_dependency 'simple_oauth', '~> 0.1.5'
-  gem.add_runtime_dependency 'rash', '~> 0.3.2'
+  gem.add_runtime_dependency 'faraday', '~> 0.8'
+  gem.add_runtime_dependency 'faraday_middleware', '~> 0.8.8'
+  gem.add_runtime_dependency 'simple_oauth', '~> 0.1.9'
 end
